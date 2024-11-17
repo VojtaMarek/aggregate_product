@@ -4,7 +4,7 @@ from email.policy import default
 from itertools import product
 from typing import Optional
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from uuid import UUID
 import logging
 
@@ -31,8 +31,10 @@ async def version():
     return {"version": "0.1.0"}
 
 
-@app.get("/product/{id_}/offers")
+@app.get("/product/{product_id}/offers")
 async def get_product_id_offers(products: dependencies.ProductOffers):
+    if products is None:
+        raise HTTPException(status_code=404, detail='Product not in local database and may not be registered.')
     return products
 
 
@@ -46,7 +48,9 @@ async def create_product(db: dependencies.AsyncDB,
                          id_: Optional[UUID] = None,
                          name: Optional[str] = None,
                          description: Optional[str] = None):
-    _product: models.Product = await dependencies.create_product(db, id_, name, description)
+    _product: models.Product | None = await dependencies.create_product(db, id_, name, description)
+    if not _product:
+        raise HTTPException(status_code=404, detail='Product registration failed. Access token may not be gotten.')
     return _product
 
 
