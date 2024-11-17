@@ -28,8 +28,8 @@ def upgrade() -> None:
     )
     op.create_table('offers',
     sa.Column('id', sa.UUID(), nullable=False),
-    sa.Column('price', sa.String(), nullable=True),
-    sa.Column('items_in_stock', sa.String(), nullable=True),
+    sa.Column('price', sa.Integer(), nullable=True),
+    sa.Column('items_in_stock', sa.Integer(), nullable=True),
     sa.Column('product_id', sa.UUID(), nullable=True),
     sa.ForeignKeyConstraint(['product_id'], ['products.id'], ),
     sa.PrimaryKeyConstraint('id')

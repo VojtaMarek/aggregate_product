@@ -18,6 +18,6 @@ class Offer(Base):
     __tablename__ = 'offers'
 
     id = Column(UUID, primary_key=True)
-    price = Column(String, nullable=True)
-    items_in_stock = Column(String, nullable=True)
+    price = Column(Integer, nullable=True)
+    items_in_stock = Column(Integer, nullable=True)
     product_id = Column(UUID, ForeignKey('products.id'))
