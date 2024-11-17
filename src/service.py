@@ -16,13 +16,13 @@ class ServiceManager:
         # dynamically set request method
         self.request_method = getattr(requests, method.lower())
 
-    async def async_request(self):
+    async def async_request(self, data=None):
         try:
-            res = await asyncio.to_thread(self.request_method, self.base_url, headers=self.headers)
+            res = await asyncio.to_thread(self.request_method, self.base_url, headers=self.headers, json=data)
             return res
         except Exception as e:
             logger.warning('Request not successful.')
 
-    def request(self):
-        res = self.request_method(self.base_url, headers=self.headers)
+    def request(self, data=None):
+        res = self.request_method(self.base_url, headers=self.headers, json=data)
         return res
