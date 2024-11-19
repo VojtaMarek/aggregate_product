@@ -1,0 +1,31 @@
+# Use the official Python slim image
+FROM python:3.12-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Install pipenv and dependencies
+RUN pip install --no-cache-dir pipenv
+COPY Pipfile Pipfile.lock ./
+RUN pipenv install --system --deploy
+
+
+# Copy the /src directory contents into the container, exclude db_data
+COPY ./src .
+COPY access_token .
+
+# Expose the required port (ensure this matches your application config)
+EXPOSE 8000
+
+# Set environment variables
+ENV DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/app_db
+ENV BASE_URL=https://.../api/v1
+ENV REFRESH_TOKEN=...
+ENV PYTHONPATH=/app
+
+# Set the command to run the app using pipenv and uvicorn
+CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+# Alembic upgrade
+#RUN #python database.py
+#RUN alembic upgrade head
