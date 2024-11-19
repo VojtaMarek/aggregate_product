@@ -5,11 +5,13 @@ name = "pypi"
 
 [packages]
 fastapi = "*"
-alembic = "*"
 sqlalchemy = "*"
 psycopg2-binary = "*"
 asyncpg = "*"
 requests = "*"
+pytest = "*"
+uvicorn = "*"
+alembic = {extras = ["asyncpg"], version = "*"}
 
 [dev-packages]
 
