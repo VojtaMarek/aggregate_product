@@ -12,7 +12,8 @@ config = context.config
 
 # this will overwrite the ini-file sqlalchemy.url path
 # with the path given in the config of the main code
-config.set_main_option('sqlalchemy.url', os.getenv('DATABASE_URL'))
+database_url_alembic = os.environ['DATABASE_URL'].replace("+asyncpg", "")
+config.set_main_option('sqlalchemy.url', database_url_alembic)
 
 
 # Interpret the config file for Python logging.
