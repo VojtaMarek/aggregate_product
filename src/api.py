@@ -48,9 +48,9 @@ async def create_product(db: dependencies.AsyncDB,
                          id_: Optional[UUID] = None,
                          name: Optional[str] = None,
                          description: Optional[str] = None):
-    _product: models.Product | None = await dependencies.create_product(db, id_, name, description)
-    if not _product:
-        raise HTTPException(status_code=404, detail='Product registration failed. Access token may not be gotten.')
+    _product, code = await dependencies.create_product(db, id_, name, description)
+    if _product is None:
+        raise HTTPException(status_code=code, detail='Product registration failed.')
     return _product
 
 
@@ -63,3 +63,6 @@ async def update_product(db: dependencies.AsyncDB,
     return _product
 
 
+@app.delete("/products")
+async def get_all_products(products: dependencies.Products):
+    return products
